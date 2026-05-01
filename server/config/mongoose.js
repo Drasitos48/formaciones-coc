@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 export default async function connectMongo() {
-  const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/app_tailwind';
+  const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/formaciones-coc';
 
   try {
     await mongoose.connect(uri);
