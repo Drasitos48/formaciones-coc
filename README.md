@@ -1,5 +1,9 @@
 # Ejemplo de proyecto Node con Express, Nunjucks, Vite y Tailwind
 
+Importante:
+Agregado inserts de ejemplo dentro de "seeds/seed.js", para poder ejecutarlo, simplemente ejecutar en la raíz
+del proyecto "npm run seed" y se insertará todo automáticamente.
+
 ## Modos de ejecución
 
 En **desarrollo**, ejecutar en dos terminales distintos:
