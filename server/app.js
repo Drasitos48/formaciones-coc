@@ -6,7 +6,9 @@ import dotenv from 'dotenv'
 import methodOverride from 'method-override'
 
 import connectMongo from './config/mongoose.js'
-import indexRouter from './routes/contactos.js'
+import tropaRouter from './routes/tropas.js'
+import hechizoRouter from './routes/hechizos.js'
+import formacionRouter from './routes/formaciones.js'
 import { viteAsset, viteCssFiles, isDev } from './utils/vite-assets.js'
 
 dotenv.config()
@@ -30,12 +32,12 @@ nunjucks.configure(path.join(__dirname, 'views'), {
 })
 
 app.use(methodOverride(function (req, res) {
-    if (req.body && typeof req.body === 'object' && '_method' in req.body) {
-      let method = req.body._method;
-      delete req.body._method;
-      return method;
-    } 
-}));
+  if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+    let method = req.body._method
+    delete req.body._method
+    return method
+  }
+}))
 
 app.set('view engine', 'njk')
 app.set('views', path.join(__dirname, 'views'))
@@ -44,7 +46,13 @@ app.locals.isDev = isDev
 app.locals.viteAsset = viteAsset
 app.locals.viteCssFiles = viteCssFiles
 
-app.use('/contactos', indexRouter)
+app.use('/tropas', tropaRouter)
+app.use('/hechizos', hechizoRouter)
+app.use('/formaciones', formacionRouter)
+
+app.get('/', (req, res) => {
+  res.redirect('/formaciones')
+})
 
 const port = process.env.PORT || 3000
 app.listen(port, () => {
