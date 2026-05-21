@@ -1,2 +1,70 @@
 @import "tailwindcss";
 @source "../../server/views";
+
+:root {
+  --mi-variable: 0.25em;
+}
+
+@theme {
+  /* Estilos de colores de Clash of Clans */
+  --color-coc-wood-light: #4a2e1b;
+  --color-coc-wood-dark: #2d1a0e;
+  --color-coc-gold: #e5a93b;
+  --color-coc-gold-dark: #b87c1e;
+  --color-coc-green: #61a825;
+  --color-coc-green-dark: #447817;
+  --color-coc-text-gold: #ffcc00;
+  --color-coc-text-light: #fff5cc;
+  --color-coc-text-muted: #c2b4a6;
+
+  /* Una animacion de entrada cuando cargan los elementos */
+  --animate-coc-fade-in: coc-fade-in 0.4s ease-out forwards;
+
+  @keyframes coc-fade-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95) translateY(-5px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+}
+
+@layer components {
+  /* Contenedores de madera/piedra estilo interfaz del juego */
+  .coc-navbar {
+    @apply bg-linear-to-b from-coc-wood-light to-coc-wood-dark;
+    @apply border-b-4 border-coc-gold shadow-2xl px-4 py-3;
+  }
+
+  /* Texto dorado */
+  .coc-title-gold {
+    @apply font-black text-transparent bg-clip-text;
+    @apply bg-linear-to-b from-coc-text-light to-coc-text-gold;
+    @apply tracking-wider uppercase;
+  }
+
+  /* Base de estilos para los botones */
+  .coc-btn {
+    @apply relative inline-block px-6 py-2.5 text-white font-black rounded-lg text-sm uppercase;
+    @apply transition-all hover:brightness-110;
+    @apply active:border-b-0 active:mt-1 active:-mb-1; /* Al presionar, hace una animación de hundimiento */
+  }
+  
+  /* Sombra del texto interior de los botones */
+  .coc-btn span {
+    @apply drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)];
+  }
+
+  /* Botón Verde (Simbolizan acciones principales, como crear, guardar, aceptar, etc.) */
+  .coc-btn-green {
+    @apply bg-linear-to-b from-coc-green to-coc-green-dark border-b-4 border-[#2d520f];
+  }
+
+  /* Botón Dorado (Simbolizan acciones secundarias, como editar, eliminar, cancelar, etc.) */
+  .coc-btn-gold {
+    @apply bg-linear-to-b from-coc-gold to-coc-gold-dark border-b-4 border-[#7a4f10];
+  }
+}
