@@ -43,7 +43,13 @@ const tropaSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true
-  }
+  },
+  nivelMaximo: 
+  {
+  type: Number,
+  required: true,
+  min: 1
+  },
 });
 
 const Tropa = mongoose.model('tropa', tropaSchema);

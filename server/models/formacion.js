@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
 
 const formacionSchema = new mongoose.Schema({
-  nombre: 
+
+  nombre:
   {
     type: String,
     required: true,
@@ -9,23 +10,24 @@ const formacionSchema = new mongoose.Schema({
     trim: true
   },
 
-  descripcion: 
+  descripcion:
   {
     type: String,
     required: true,
     trim: true
   },
 
-  tropas: 
+  tropas:
   [
     {
-      tropa: 
+      tropa:
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'tropa',
         required: true
       },
-      cantidad: 
+
+      cantidad:
       {
         type: Number,
         required: true,
@@ -34,16 +36,17 @@ const formacionSchema = new mongoose.Schema({
     }
   ],
 
-  hechizos: 
+  hechizos:
   [
     {
-      hechizo: 
+      hechizo:
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'hechizo',
         required: true
       },
-      cantidad: 
+
+      cantidad:
       {
         type: Number,
         required: true,
@@ -52,11 +55,26 @@ const formacionSchema = new mongoose.Schema({
     }
   ],
 
-  fechaCreacion: 
+  capacidadTropas:
+  {
+    type: Number,
+    default: 352,
+    max: 352
+  },
+
+  capacidadHechizos:
+  {
+    type: Number,
+    default: 11,
+    max: 11
+  },
+
+  fechaCreacion:
   {
     type: Date,
     default: Date.now
   }
+
 });
 
 const Formacion = mongoose.model('formacion', formacionSchema);

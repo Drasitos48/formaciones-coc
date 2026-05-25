@@ -37,7 +37,13 @@ const hechizoSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true
-  }
+  },
+  nivelMaximo:
+  {
+  type: Number,
+  required: true,
+  min: 1
+  },
 });
 
 const Hechizo = mongoose.model('hechizo', hechizoSchema);
