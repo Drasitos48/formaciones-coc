@@ -54,72 +54,36 @@
       </section>
 
       <!-- SECCIÓN DE TROPAS DISPONIBLES -->
-      <section class="coc-container">
-        <h2 class="text-xl font-black text-coc-text-light uppercase tracking-wider mb-4 flex items-center gap-2">
-           Seleccionar Tropas Disponibles
-        </h2>
-        
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 bg-black/20 p-4 rounded-xl border-2 border-coc-wood-light">
-          {% for tropa in tropas %}
-            <div class="relative aspect-square bg-sky-200 border-[3px] border-coc-wood-dark rounded-xl shadow-md hover:scale-105 hover:border-white transition-all duration-150 cursor-pointer"
-                  id="tropa-{{ tropa.id }}" onclick="agregar('tropa', '{{ tropa.id }}', '{{ tropa.nombre }}', '{{ tropa.imagenIcono }}', {{ tropa.espacio }}, {{ tropa.nivelMaximo }})">
-
-              <img src="{{ tropa.imagenIcono }}" alt="{{ tropa.nombre }}" class="w-full h-full object-cover select-none rounded-lg">
-              
-              <a href="/tropas/{{ tropa.id }}" target="_blank" 
-                 class="absolute top-1.5 right-1.5 w-5 h-5 bg-sky-500 border border-black rounded-md flex items-center justify-center font-black text-xs text-white shadow-md hover:bg-sky-600 pointer-events-auto z-10"
-                 title="Ver info de {{ tropa.nombre }}">
-                i
-              </a>
-              
-              <div class="absolute top-[40%] left-1.5 w-7 h-7 bg-linear-to-b from-coc-gold to-coc-gold-dark border-2 border-coc-wood-light rounded-md flex items-center justify-center font-black text-xs text-coc-wood-dark shadow-md">
-                {{ tropa.nivelMaximo }}
-              </div>
-              
-              <div class="absolute bottom-0 left-0 w-full bg-black/60 border-t border-white/10 px-2 py-0.5 flex items-center justify-between text-white font-black text-xs rounded-b-lg">
-                <span>{{ tropa.espacio }}</span>
-                <img src="/img/decorativas/generic-stickman.png" alt="Espacio" class="w-6 h-6">
-              </div>
-            </div>
-          {% else %}
-            <p class="col-span-full text-sm font-bold text-coc-text-muted italic text-center">No hay tropas actualmente.</p>
-          {% endfor %}
-        </div>
-      </section>
+     <section class="coc-container">
+      <h2 class="text-xl font-black text-coc-text-light uppercase tracking-wider mb-4 flex items-center gap-2">
+        Seleccionar Tropas Disponibles
+      </h2>
+      
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 bg-black/20 p-4 rounded-xl border-2 border-coc-wood-light">
+        {% set esFormulario = true %}
+        {% for tropa in tropas %}
+          {% include "partials/card_tropa.njk" %}
+        {% else %}
+          <p class="col-span-full text-sm font-bold text-coc-text-muted italic text-center">No hay tropas actualmente.</p>
+        {% endfor %}
+      </div>
+    </section>
 
       <!-- SECCIÓN DE HECHIZOS DISPONIBLES -->
       <section class="coc-container">
-        <h2 class="text-xl font-black text-coc-text-light uppercase tracking-wider mb-4 flex items-center gap-2">
-          Seleccionar Hechizos Disponibles
-        </h2>
-        
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 bg-black/20 p-4 rounded-xl border-2 border-coc-wood-light">
-          {% for hechizo in hechizos %}
-            <div class="relative aspect-square bg-emerald-200 border-[3px] border-coc-wood-dark rounded-xl shadow-md hover:scale-105 hover:border-white transition-all duration-150 cursor-pointer"
-                 id="hechizo-{{ hechizo.id }}" onclick="agregar('hechizo', '{{ hechizo.id }}', '{{ hechizo.nombre }}', '{{ hechizo.imagenIcono }}', {{ hechizo.espacio }}, {{ hechizo.nivelMaximo }})">
-
-              <img src="{{ hechizo.imagenIcono }}" alt="{{ hechizo.nombre }}" class="w-full h-full object-cover select-none rounded-lg">
-              
-              <a href="/hechizos/{{ hechizo.id }}" target="_blank" 
-                 class="absolute top-1.5 right-1.5 w-5 h-5 bg-sky-500 border border-black rounded-md flex items-center justify-center font-black text-xs text-white shadow-md hover:bg-sky-600 pointer-events-auto z-10"
-                 title="Ver info de {{ hechizo.nombre }}">
-                i
-              </a>
-              
-              <div class="absolute top-[40%] left-1.5 w-7 h-7 bg-linear-to-b from-coc-gold to-coc-gold-dark border-2 border-coc-wood-light rounded-md flex items-center justify-center font-black text-xs text-coc-wood-dark shadow-md">
-                {{ hechizo.nivelMaximo }}
-              </div>
-              
-              <div class="absolute bottom-0 left-0 w-full bg-black/60 border-t border-white/10 px-2 py-0.5 flex items-center justify-between text-white font-black text-xs rounded-b-lg">
-                <span>{{ hechizo.espacio }}</span>
-                <img src="/img/decorativas/elixir-spells.png" alt="Espacio" class="w-6 h-6">
-              </div>
-            </div>
-          {% else %}
-            <p class="col-span-full text-sm font-bold text-coc-text-muted italic text-center">No hay hechizos actualmente.</p>
-          {% endfor %}
-        </div>
-      </section>
+      <h2 class="text-xl font-black text-coc-text-light uppercase tracking-wider mb-4 flex items-center gap-2">
+        Seleccionar Hechizos Disponibles
+      </h2>
+      
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 bg-black/20 p-4 rounded-xl border-2 border-coc-wood-light">
+        {% set esFormulario = true %}
+        {% for hechizo in hechizos %}
+          {% include "partials/card_hechizo.njk" %}
+        {% else %}
+          <p class="col-span-full text-sm font-bold text-coc-text-muted italic text-center">No hay hechizos actualmente.</p>
+        {% endfor %}
+      </div>
+    </section>
 
       <!-- BOTONES DE GUARDAR Y CANCELAR -->
       <div class="flex justify-end gap-4 coc-container">
@@ -136,6 +100,8 @@
 </div>
 
 <script>
+  window.esFormulario = true;
+  
   // Lista de tropas y hechizos seleccionados para la formación, con su cantidad y espacio ocupado
   var listaTropas = [];
   var listaHechizos = [];

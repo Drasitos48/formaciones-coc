@@ -1,0 +1,14 @@
+{% extends "base.njk" %}
+{% block titulo %}Caldero de Hechizos{% endblock %}
+{% block contenido %}
+<div class="max-w-6xl mx-auto py-8 px-4">
+  <h1 class="text-3xl font-black text-white mb-6 uppercase tracking-wider">Hechizos Disponibles</h1>
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+    {% for hechizo in hechizos %}
+      {% include "partials/card_hechizo.njk" %}
+    {% else %}
+      <p class="text-white italic">No hay hechizos registrados en el Caldero.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

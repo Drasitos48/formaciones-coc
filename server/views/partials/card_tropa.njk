@@ -1,0 +1,29 @@
+<div class="relative aspect-square bg-sky-200 border-[3px] border-coc-wood-dark rounded-xl shadow-md transition-all duration-150 
+
+     {% if esFormulario %} 
+        hover:scale-105 hover:border-white cursor-pointer 
+    {% endif %}"
+
+     id="tropa-{{ tropa.id }}"
+
+     {% if esFormulario %} 
+        onclick="agregar('tropa', '{{ tropa.id }}', '{{ tropa.nombre }}', '{{ tropa.imagenIcono }}', {{ tropa.espacio }}, {{ tropa.nivelMaximo }})" 
+    {% endif %}>
+
+  <img src="{{ tropa.imagenIcono }}" alt="{{ tropa.nombre }}" class="w-full h-full object-cover select-none rounded-lg">
+  
+  <a href="/tropas/{{ tropa.id }}"
+     class="absolute top-1.5 right-1.5 w-5 h-5 bg-sky-500 border border-black rounded-md flex items-center justify-center font-black text-xs text-white shadow-md hover:bg-sky-600 pointer-events-auto z-10"
+     title="Ver info de {{ tropa.nombre }}">
+    i
+  </a>
+  
+  <div class="absolute top-[40%] left-1.5 w-7 h-7 bg-linear-to-b from-coc-gold to-coc-gold-dark border-2 border-coc-wood-light rounded-md flex items-center justify-center font-black text-xs text-coc-wood-dark shadow-md">
+    {{ tropa.nivelMaximo }}
+  </div>
+  
+  <div class="absolute bottom-0 left-0 w-full bg-black/60 border-t border-white/10 px-2 py-0.5 flex items-center justify-between text-white font-black text-xs rounded-b-lg">
+    <span>{{ tropa.espacio }}</span>
+    <img src="/img/decorativas/generic-stickman.png" alt="Espacio" class="w-6 h-6">
+  </div>
+</div>

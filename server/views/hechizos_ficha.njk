@@ -1,0 +1,58 @@
+{% extends "base.njk" %}
+
+{% block titulo %}Ficha de {{ hechizo.nombre }} - Clash of Clans{% endblock %}
+
+{% block contenido %}
+<div class="bg-coc-cesped py-12 px-4 min-h-screen animate-coc-fade-in">
+  <div class="max-w-3xl mx-auto">
+    
+    <div class="mb-6">
+      <a href="/formaciones/nuevo" class="inline-flex items-center gap-2 coc-btn-gold font-black px-4 py-2 border-2 border-coc-wood-light rounded-xl shadow-md hover:scale-105 transition-all text-xs uppercase tracking-wider">
+        Volver atrás
+      </a>
+    </div>
+
+    <div class="coc-container">
+      
+      <h3 class="block text-2xl coc-title-gold pb-3 text-center md:text-left">
+        {{ hechizo.nombre }} de Nivel {{ hechizo.nivelMaximo }}
+      </h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <div class="bg-black/30 p-4 rounded-xl border-2 border-coc-wood-dark flex items-center justify-center aspect-square max-h-75 mx-auto md:max-h-none w-full">
+          <img src="{{ hechizo.imagenGrande }}" alt="{{ hechizo.nombre }}" class="w-full h-full object-contain select-none">
+        </div>
+
+        <div class="space-y-3 font-bold text-sm">
+          
+          <div class="bg-coc-wood-ultra-dark p-3 rounded-xl border flex justify-between items-center shadow-md">
+            <span class="text-coc-text-muted uppercase tracking-wider text-xs">Duración del efecto:</span>
+            <span class="text-white font-black text-lg">
+              {{ hechizo.duracion }}{% if hechizo.duracion %} seg{% endif %}
+            </span>
+          </div>
+
+          <div class="bg-coc-wood-ultra-dark p-3 rounded-xl border flex justify-between items-center shadow-md">
+            <span class="text-coc-text-muted uppercase tracking-wider text-xs">Efecto / Daño:</span>
+            <span class="text-white font-black text-lg">{{ hechizo.dano }}</span>
+          </div>
+
+          <div class="bg-coc-wood-ultra-dark p-3 rounded-xl border flex justify-between items-center shadow-md">
+            <span class="text-coc-text-muted uppercase tracking-wider text-xs">Objetivos:</span>
+            <span class="text-white font-black uppercase text-base tracking-wide">Terrestres y Aéreos</span>
+          </div>
+
+          <div class="bg-coc-wood-ultra-dark p-3 rounded-xl border flex justify-between items-center shadow-md">
+            <span class="text-coc-text-muted uppercase tracking-wider text-xs">Espacio del Hechizo:</span>
+            <div class="flex items-center gap-2">
+              <span class="text-coc-text-gold font-black text-lg">{{ hechizo.espacio }}</span>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
