@@ -1,22 +1,123 @@
 {% extends "base.njk" %}
 
-{% block titulo %}Contactos | Listado{% endblock %}
+{% block titulo %}Mis Ejércitos - Clash of Clans{% endblock %}
 
 {% block contenido %}
 
-    <h1>Listado de contactos</h1>
+<div class="bg-coc-cesped py-8 px-4 min-h-screen animate-coc-fade-in">
+  <div class="max-w-6xl mx-auto space-y-6">
 
-    <ul>
-        {% for contacto in contactos %}
-            <li>{{ contacto.nombre }} 
-                <a class="bg-lime-500 rounded-lg" href="/contactos/{{ contacto.id }}">Ficha</a>
-                <form style="display:inline" action="/contactos/{{ contacto.id }}" method="post">
-                    <input type="hidden" name="_method" value="delete" />
-                    <button type="submit" class="bg-red-400 rounded-lg">Borrar</button>
-                </form>
-                <a class="bg-blue-400 rounded-lg" href="/contactos/editar/{{ contacto.id }}">Editar</a>
-            </li>
-        {% endfor %}
-    </ul>
+    <!-- MENSAJES DE ÉXITO INFORMATIVOS -->
+    {% if mensaje %}
+      <div class="bg-green-600 border-2 border-green-400 text-white font-black px-4 py-3 rounded-xl flex justify-between items-center shadow-lg uppercase text-sm tracking-wider">
+        <span> {{ mensaje }}</span>
+        <button onclick="this.parentElement.remove()" class="text-white hover:text-green-200 font-bold text-xl">x</button>
+      </div>
+    {% endif %}
 
+    <header class="coc-container flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <h1 class="text-3xl font-black text-transparent coc-title-gold">
+          Estrategias de Clash of Clans
+        </h1>
+        <p class="text-sm text-coc-text-muted font-bold mt-1">Gestiona tus formaciones guardadas y usalas para atacar.</p>
+      </div>
+      <div>
+        <a href="/formaciones/nuevo" class="coc-btn coc-btn-gold">
+          <span>+ Crear Formación</span>
+        </a>
+      </div>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+    <!-- LISTADO DE FORMACIONES -->
+      {% for formacion in formaciones %}
+        <div class="coc-container flex flex-col justify-between space-y-4 group">
+          
+          <div>
+            <div class="flex justify-between items-start gap-2">
+              <h2 class="text-2xl font-black text-white uppercase tracking-wide group-hover:text-coc-text-gold">
+                {{ formacion.nombre }}
+              </h2>
+              <span class="text-xs font-bold text-coc-text-muted italic">
+                {{ formacion.fechaCreacion.toLocaleDateString('es-ES') }}
+              </span>
+            </div>
+            <p class="text-sm text-coc-text-light font-medium mt-1">
+              {{ formacion.descripcion }}
+            </p>
+          </div>
+
+          <div class="bg-black/30 p-3 rounded-lg border border-coc-wood-light space-y-2">
+            
+            <!-- SECCIÓN DE TROPAS -->
+            {% if formacion.tropas.length > 0 %}
+              <div class="flex flex-wrap gap-1.5 items-center">
+                <span class="text-[12px] uppercase font-black text-sky-400 tracking-wider mr-1">Tropas:</span>
+                {% for item in formacion.tropas %}
+                  {% if item.tropa %}
+                    <div class="relative w-15 h-15 bg-sky-200 border-2 border-coc-wood-dark rounded-md shadow-xs" title="{{ item.tropa.nombre }}">
+                      <img src="{{ item.tropa.imagenIcono }}" class="w-full h-full object-cover rounded-xs">
+                      <span class="absolute -bottom-1 -right-1 bg-black/80 text-[9px] font-black text-coc-text-gold px-0.5 rounded-sm border border-white/10">
+                        x{{ item.cantidad }}
+                      </span>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            <!-- SECCIÓN DE HECHIZOS -->
+            {% if formacion.hechizos.length > 0 %}
+              <div class="flex flex-wrap gap-1.5 items-center">
+                <span class="text-[12px] uppercase font-black text-emerald-400 tracking-wider mr-1">Hechizos:</span>
+                {% for item in formacion.hechizos %}
+                  {% if item.hechizo %}
+                    <div class="relative w-15 h-15 bg-emerald-200 border-2 border-coc-wood-dark rounded-md shadow-xs" title="{{ item.hechizo.nombre }}">
+                      <img src="{{ item.hechizo.imagenIcono }}" class="w-full h-full object-cover rounded-xs">
+                      <span class="absolute -bottom-1 -right-1 bg-black/80 text-[9px] font-black text-white px-0.5 rounded-sm border border-white/10">
+                        x{{ item.cantidad }}
+                      </span>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            {% if formacion.tropas.length == 0 and formacion.hechizos.length == 0 %}
+              <p class="text-xs text-coc-text-muted italic">Ejército vacío, no hay unidades asignadas a esta formación.</p>
+            {% endif %}
+          </div>
+
+          <div class="flex justify-end gap-2 pt-2 border-t border-white/10">
+            <a href="/formaciones/{{ formacion.id }}" class="px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white font-black text-xs uppercase rounded-lg border border-black shadow-md tracking-wider transition-colors">
+              Ver Ficha
+            </a>
+            <a href="/formaciones/editar/{{ formacion.id }}" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-coc-wood-dark font-black text-xs uppercase rounded-lg border border-black shadow-md tracking-wider transition-colors">
+              Editar
+            </a>
+            
+            <form action="/formaciones/{{ formacion.id }}" method="post" onsubmit="return confirm('¿Seguro que quieres eliminar esta formación de combate?');" class="inline">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white font-black text-xs uppercase rounded-lg border border-black shadow-md tracking-wider transition-colors cursor-pointer">
+                    Borrar
+                </button>
+            </form>
+          </div>
+
+        </div>
+      {% else %}
+        <div class="col-span-full coc-container text-center py-12">
+          <p class="text-lg font-bold text-coc-text-muted italic">No has diseñado ninguna formación todavía.</p>
+          <p class="text-sm text-coc-text-muted mt-1">¡Comienza a diseñar tu primera formación!</p>
+          <a href="/formaciones/nuevo" class="coc-btn coc-btn-green inline-block mt-4">
+            <span>Diseñar Primera Formación</span>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</div>
 {% endblock %}

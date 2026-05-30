@@ -1,0 +1,126 @@
+{% extends "base.njk" %}
+
+{% block titulo %}Detalle de la Formación - Clash of Clans{% endblock %}
+
+{% block contenido %}
+<div class="bg-coc-cesped py-8 px-4 min-h-screen animate-coc-fade-in">
+  <div class="max-w-6xl mx-auto space-y-8">
+
+    <div class="flex justify-start">
+      <a href="javascript:history.back()" class="coc-btn coc-btn-gold inline-flex items-center gap-2 text-xs">
+        <span>← Volver a Formaciones</span>
+      </a>
+    </div>
+
+    <header class="coc-container flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <div class="space-y-1">
+        <div class="flex items-center gap-3">
+          <h1 class="text-3xl font-black text-transparent bg-clip-text coc-title-gold">
+            {{ formacion.nombre }}
+          </h1>
+        </div>
+        <p class="text-sm text-coc-text-light font-medium max-w-3xl">
+          {{ formacion.descripcion }}
+        </p>
+        <p class="text-xs text-coc-text-muted font-bold italic pt-1">
+          Creado el: {{ formacion.fechaCreacion.toLocaleDateString('es-ES') }}
+        </p>
+      </div>
+
+      <div class="flex gap-4">
+
+        <!-- CÁLCULO DE ESPACIO OCUPADO POR TROPAS Y HECHIZOS -->
+        {% set totalEspacioTropas = 0 %}
+        {% for item in formacion.tropas %}
+          {% if item.tropa %}
+            {% set totalEspacioTropas = totalEspacioTropas + (item.tropa.espacio * item.cantidad) %}
+          {% endif %}
+        {% endfor %}
+
+        {% set totalEspacioHechizos = 0 %}
+        {% for item in formacion.hechizos %}
+          {% if item.hechizo %}
+            {% set totalEspacioHechizos = totalEspacioHechizos + (item.hechizo.espacio * item.cantidad) %}
+          {% endif %}
+        {% endfor %}
+
+        <div class="bg-black/40 border-2 border-coc-wood-light px-4 py-2 rounded-xl text-center">
+          <span class="block text-xs uppercase text-coc-text-muted font-bold tracking-widest">Tropas</span>
+          <span class="text-xl font-black text-coc-text-gold">{{ totalEspacioTropas }} / 352</span>
+        </div>
+        <div class="bg-black/40 border-2 border-coc-wood-light px-4 py-2 rounded-xl text-center">
+          <span class="block text-xs uppercase text-coc-text-muted font-bold tracking-widest">Hechizos</span>
+          <span class="text-xl font-black text-white">{{ totalEspacioHechizos }} / 11</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="coc-container">
+      <h2 class="text-xl font-black text-sky-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+         Tropas
+      </h2>
+      
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 bg-black/20 p-4 rounded-xl border-2 border-coc-wood-light">
+
+      <!-- SECCIÓN DE TROPAS (como es de forma visual, no es un formulario de edicción/insercción) -->
+        {% set esFormulario = false %}
+        {% for item in formacion.tropas %}
+          {% if item.tropa %}
+            <div class="relative group">
+              {% set tropa = item.tropa %}
+              {% include "partials/card_tropa.njk" %}
+              
+              <div class="absolute top-1.5 left-1.5 bg-black/80 px-2 py-0.5 rounded-md font-black text-sm text-coc-text-gold border border-coc-wood-light shadow-md z-10">
+                x{{ item.cantidad }}
+              </div>
+
+              <div class="absolute bottom-0 left-0 w-full bg-black/80 border-t border-white/10 px-2 py-0.5 flex items-center justify-between text-white font-black text-xs rounded-b-lg z-10">
+                <span>{{ item.tropa.espacio * item.cantidad }}</span>
+                <img src="/img/decorativas/generic-stickman.png" alt="Espacio" class="w-5 h-5">
+              </div>
+            </div>
+          {% endif %}
+        {% else %}
+          <p class="col-span-full text-sm font-bold text-coc-text-muted italic text-center py-4">Este ejército no incluye tropas de asalto.</p>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="coc-container">
+      <h2 class="text-xl font-black text-emerald-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+        Hechizos
+      </h2>
+      
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 bg-black/20 p-4 rounded-xl border-2 border-coc-wood-light">
+        {% set esFormulario = false %}
+        {% for item in formacion.hechizos %}
+          {% if item.hechizo %}
+            <div class="relative group">
+              {% set hechizo = item.hechizo %}
+              {% include "partials/card_hechizo.njk" %}
+              
+              <div class="absolute top-1.5 left-1.5 bg-black/80 px-2 py-0.5 rounded-md font-black text-sm text-white border border-coc-wood-light shadow-md z-10">
+                x{{ item.cantidad }}
+              </div>
+
+              <div class="absolute bottom-0 left-0 w-full bg-black/80 border-t border-white/10 px-2 py-0.5 flex items-center justify-between text-white font-black text-xs rounded-b-lg z-10">
+                <span>{{ item.hechizo.espacio * item.cantidad }}</span>
+                <img src="/img/decorativas/elixir-spells.png" alt="Espacio" class="w-5 h-5">
+              </div>
+            </div>
+          {% endif %}
+        {% else %}
+          <p class="col-span-full text-sm font-bold text-coc-text-muted italic text-center py-4">Este ejército no lleva hechizos de apoyo de la fábrica.</p>
+        {% endfor %}
+      </div>
+    </section>
+
+    <div class="flex justify-end gap-4 coc-container">
+      <a href="/formaciones/editar/{{ formacion.id }}" class="coc-btn coc-btn-gold">
+        <span>Modificar Formación</span>
+      </a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
