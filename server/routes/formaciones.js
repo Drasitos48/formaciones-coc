@@ -11,7 +11,10 @@ router.get('/', (req, res) => {
     .populate('tropas.tropa')
     .populate('hechizos.hechizo')
     .then(resultado => {
-      res.render('formaciones_listado', { formaciones: resultado });
+      res.render('formaciones_listado', {
+        formaciones: resultado,
+        mensaje: req.query.mensaje || null
+      });
     })
     .catch(error => {
       res.render('error', { error: 'Error obteniendo formaciones' });
@@ -43,9 +46,11 @@ router.post('/insertar', (req, res) => {
   });
 
   nuevaFormacion.save().then(resultado => {
-    res.redirect(req.baseUrl);
+    res.redirect(req.baseUrl + '?mensaje=Formación creada correctamente');
   }).catch(error => {
-    res.render('error', { error: 'Error creando la formación' });
+    res.render('error', {
+      error: error.message || 'Error creando la formación'
+    });
   });
 });
 
@@ -71,28 +76,42 @@ router.get('/editar/:id', async (req, res) => {
 });
 
 // Editar formación
-router.put('/:id', (req, res) => {
-  Formacion.findByIdAndUpdate(req.params.id, {
-    $set: {
-      nombre: req.body.nombre,
-      descripcion: req.body.descripcion,
-      tropas: req.body.tropas || [],
-      hechizos: req.body.hechizos || []
+router.put('/:id', async (req, res) => {
+  try {
+    const formacion = await Formacion.findById(req.params.id);
+
+    if (!formacion) {
+      return res.render('error', {
+        error: 'Formación no encontrada'
+      });
     }
-  }, { new: true }).then(resultado => {
-    res.redirect(req.baseUrl);
-  }).catch(error => {
-    res.render('error', { error: 'Error modificando la formación' });
-  });
+
+    formacion.nombre = req.body.nombre;
+    formacion.descripcion = req.body.descripcion;
+    formacion.tropas = req.body.tropas || [];
+    formacion.hechizos = req.body.hechizos || [];
+
+    await formacion.save();
+
+    res.redirect(req.baseUrl + '?mensaje=Formación modificada correctamente');
+  } catch (error) {
+    res.render('error', {
+      error: error.message || 'Error modificando la formación'
+    });
+  }
 });
 
 // Borrar formación
 router.delete('/:id', (req, res) => {
-  Formacion.findByIdAndDelete(req.params.id).then(resultado => {
-    res.redirect(req.baseUrl);
-  }).catch(error => {
-    res.render('error', { error: 'Error borrando la formación' });
-  });
+  Formacion.findByIdAndDelete(req.params.id)
+    .then(resultado => {
+      res.redirect(req.baseUrl + '?mensaje=Formación eliminada correctamente');
+    })
+    .catch(error => {
+      res.render('error', {
+        error: 'Error borrando la formación'
+      });
+    });
 });
 
 // Ficha de formación
@@ -102,13 +121,19 @@ router.get('/:id', (req, res) => {
     .populate('hechizos.hechizo')
     .then(resultado => {
       if (resultado) {
-        res.render('formaciones_ficha', { formacion: resultado });
+        res.render('formaciones_ficha', {
+          formacion: resultado
+        });
       } else {
-        res.render('error', { error: 'Formación no encontrada' });
+        res.render('error', {
+          error: 'Formación no encontrada'
+        });
       }
     })
     .catch(error => {
-      res.render('error', { error: 'Formación no encontrada' });
+      res.render('error', {
+        error: 'Formación no encontrada'
+      });
     });
 });
 
