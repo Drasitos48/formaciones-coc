@@ -57,7 +57,10 @@ router.post('/insertar', (req, res) => {
 // Formulario de edición
 router.get('/editar/:id', async (req, res) => {
   try {
-    const formacion = await Formacion.findById(req.params.id);
+    const formacion = await Formacion.findById(req.params.id)
+      .populate('tropas.tropa')
+      .populate('hechizos.hechizo');
+    
     const tropas = await Tropa.find();
     const hechizos = await Hechizo.find();
 

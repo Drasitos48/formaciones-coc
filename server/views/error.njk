@@ -3,14 +3,46 @@
 {% block titulo %}Error{% endblock %}
 
 {% block contenido %}
+<div class="bg-coc-cesped py-12 px-4 min-h-screen flex items-center justify-center animate-coc-fade-in">
+  <div class="max-w-md w-full text-center space-y-6">
+    
+    <div class="coc-container bg-black/40 border-[3px] border-coc-wood-dark rounded-2xl p-8 shadow-2xl relative overflow-hidden backdrop-blur-xs">
+      
+      <div class="absolute -top-12 left-1/2 -translate-x-1/2 w-48 h-48 bg-red-600/20 rounded-full blur-2xl pointer-events-none"></div>
 
-    <h1>Error</h1>
-    <div class="bg-red-300 rounded-xl">
-        {% if error %}
-            {{ error|safe }}
-        {% else %}
-            Error en la aplicación
-        {% endif %}
+      <div class="relative z-10 flex justify-center mb-4">
+        <img src="/img/tropas/barbaro.png" 
+             alt="Bárbaro de Clash of Clans pensativo" 
+             class="w-48 h-48 object-contain animate-bounce">
+      </div>
+
+      <h1 class="text-3xl font-black text-transparent bg-clip-text bg-linear-to-b from-white to-red-500 uppercase tracking-wider mb-2">
+        ¡Error!
+      </h1>
+      
+      <p class="text-xs uppercase text-coc-text-muted font-black tracking-widest mb-6">Algo ha salido mal en las formaciones</p>
+
+      <div class="bg-red-950/60 border-2 border-red-700/50 rounded-xl px-4 py-3">
+        <p class="text-red-200 font-bold text-sm leading-relaxed">
+          {% if error %}
+            {{ error | safe }}
+          {% else %}
+            Se ha producido un error inesperado.
+          {% endif %}
+        </p>
+      </div>
+
+      <div class="mt-8 pt-4 border-t border-white/10 flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="javascript:history.back()" class="coc-btn coc-btn-gold">
+          Volver atrás
+        </a>
+        <a href="/formaciones" class="coc-btn coc-btn-green">
+          <span>Ir a Inicio</span>
+        </a>
+      </div>
+
     </div>
 
+  </div>
+</div>
 {% endblock %}

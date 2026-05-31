@@ -1,97 +1,94 @@
 {% extends "base.njk" %}
 
-{% block titulo %}Nueva Formación - Clash of Clans{% endblock %}
+{% block titulo %}Editar Formación - Clash of Clans{% endblock %}
 
 {% block contenido %}
-
 <div class="bg-coc-cesped py-8 px-4 animate-coc-fade-in">
   <div class="max-w-6xl mx-auto space-y-8">
     
-    <!-- HEADER CON LOS CONTADORES DE CAPACIDAD DE TROPAS Y HECHIZOS -->
+    <!-- HEADER CON CONTADORES -->
     <header class="coc-container flex flex-col md:flex-row md:items-center md:justify-between gap-4">
       <div>
         <h1 class="text-3xl font-black text-transparent coc-title-gold">
-          Crear Nueva Formación
+          Modificar Formación
         </h1>
-        <p class="text-sm text-coc-text-muted font-bold mt-1">Diseña tu ejército estratégico combinando tropas y hechizos.</p>
+        <p class="text-sm text-coc-text-muted font-bold mt-1">Modifica la composición de tu formación de combate.</p>
       </div>
       <div class="flex gap-4">
-        <div class="bg-black/40 border-2 border-coc-wood-light px-4 py-2 rounded-xl text-center shadow-inner">
+        <div class="bg-black/40 border-2 border-coc-wood-light px-4 py-2 rounded-xl text-center">
           <span class="block text-xs uppercase text-coc-text-muted font-bold tracking-widest">Capacidad Tropas</span>
           <span id="txt-contador-tropas" class="text-xl font-black text-coc-text-gold">0 / 352</span>
         </div>
-        <div class="bg-black/40 border-2 border-coc-wood-light px-4 py-2 rounded-xl text-center shadow-inner">
+        <div class="bg-black/40 border-2 border-coc-wood-light px-4 py-2 rounded-xl text-center">
           <span class="block text-xs uppercase text-coc-text-muted font-bold tracking-widest">Capacidad Hechizos</span>
           <span id="txt-contador-hechizos" class="text-xl font-black text-white">0 / 11</span>
         </div>
       </div>
     </header>
 
-    <!-- FORMULARIO INSRERTAR FORMACIÓN -->
-    <form action="/formaciones/insertar" method="POST" class="space-y-8">
+    <!-- FORMULARIO DE EDICIÓN -->
+    <form action="/formaciones/{{ formacion.id }}" method="post" class="space-y-8">
+        <input type="hidden" name="_method" value="PUT">
       
-      <!-- SECCIÓN DE NOMBRE Y DESCRIPCIÓN DE LA FORMACIÓN -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 coc-container">
         <div class="md:col-span-1">
-          <label for="nombre" class="block text-sm font-black text-coc-text-muted uppercase tracking-wider mb-2">Nombre del Ejército</label>
-          <input type="text" id="nombre" name="nombre" placeholder="Ej: Ataque Híbrido TH15" required
+          <label for="nombre" class="block text-sm font-black text-coc-text-muted uppercase tracking-wider mb-2">Nombre de la Formación</label>
+          <input type="text" id="nombre" name="nombre" value="{{ formacion.nombre }}" required
                  class="w-full px-4 py-2.5 bg-amber-50 border-2 border-coc-wood-light rounded-lg font-bold text-coc-wood-dark focus:outline-hidden focus:border-coc-gold">
         </div>
         <div class="md:col-span-2">
           <label for="descripcion" class="block text-sm font-black text-coc-text-muted uppercase tracking-wider mb-2">Estrategia / Descripción</label>
-          <input type="text" id="descripcion" name="descripcion" placeholder="Explica brevemente cómo usar esta formación en batalla..." required
+          <input type="text" id="descripcion" name="descripcion" value="{{ formacion.descripcion }}" required
                  class="w-full px-4 py-2.5 bg-amber-50 border-2 border-coc-wood-light rounded-lg font-bold text-coc-wood-dark focus:outline-hidden focus:border-coc-gold">
         </div>
       </div>
 
-      <!-- SECCIÓN DE TROPAS Y HECHIZOS SELECCIONADOS PARA LA FORMACIÓN -->
+        <!-- TITULO Y DESCRIPCIÓN -->
       <section class="coc-container">
         <h2 class="text-xl font-black text-coc-text-light uppercase tracking-wider mb-4 flex items-center gap-2">
            Composición Actual de la Formación
         </h2>
         <div id="contenedor-composicion" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 bg-black/30 p-4 rounded-xl border-2 border-coc-wood-light">
-          <p id="mensaje-vacio" class="col-span-full text-sm font-bold text-coc-text-muted italic text-center">No hay ninguna tropa o hechizo seleccionado...</p>        </div>
+          </div>
       </section>
 
-      <!-- SECCIÓN DE TROPAS DISPONIBLES -->
-     <section class="coc-container">
-      <h2 class="text-xl font-black text-coc-text-light uppercase tracking-wider mb-4 flex items-center gap-2">
-        Seleccionar Tropas Disponibles
-      </h2>
-      
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 bg-black/20 p-4 rounded-xl border-2 border-coc-wood-light">
-        {% set esFormulario = true %}
-        {% for tropa in tropas %}
-          {% include "partials/card_tropa.njk" %}
-        {% else %}
-          <p class="col-span-full text-sm font-bold text-coc-text-muted italic text-center">No hay tropas actualmente.</p>
-        {% endfor %}
-      </div>
-    </section>
-
-      <!-- SECCIÓN DE HECHIZOS DISPONIBLES -->
+        <!-- SECCIÓN DE TROPAS DISPONIBLES -->
       <section class="coc-container">
-      <h2 class="text-xl font-black text-coc-text-light uppercase tracking-wider mb-4 flex items-center gap-2">
-        Seleccionar Hechizos Disponibles
-      </h2>
-      
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 bg-black/20 p-4 rounded-xl border-2 border-coc-wood-light">
-        {% set esFormulario = true %}
-        {% for hechizo in hechizos %}
-          {% include "partials/card_hechizo.njk" %}
-        {% else %}
-          <p class="col-span-full text-sm font-bold text-coc-text-muted italic text-center">No hay hechizos actualmente.</p>
-        {% endfor %}
-      </div>
-    </section>
+        <h2 class="text-xl font-black text-coc-text-light uppercase tracking-wider mb-4 flex items-center gap-2">
+          Seleccionar Tropas Disponibles
+        </h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 bg-black/20 p-4 rounded-xl border-2 border-coc-wood-light">
+          {% set esFormulario = true %}
+          {% for tropa in tropas %}
+            {% include "partials/card_tropa.njk" %}
+          {% else %}
+            <p class="col-span-full text-sm font-bold text-coc-text-muted italic text-center">No hay tropas actualmente.</p>
+          {% endfor %}
+        </div>
+      </section>
 
-      <!-- BOTONES DE GUARDAR Y CANCELAR -->
+        <!-- SECCIÓN DE HECHIZOS DISPONIBLES -->
+      <section class="coc-container">
+        <h2 class="text-xl font-black text-coc-text-light uppercase tracking-wider mb-4 flex items-center gap-2">
+          Seleccionar Hechizos Disponibles
+        </h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 bg-black/20 p-4 rounded-xl border-2 border-coc-wood-light">
+          {% set esFormulario = true %}
+          {% for hechizo in hechizos %}
+            {% include "partials/card_hechizo.njk" %}
+          {% else %}
+            <p class="col-span-full text-sm font-bold text-coc-text-muted italic text-center">No hay hechizos actualmente.</p>
+          {% endfor %}
+        </div>
+      </section>
+
+        <!-- BOTONES DE GUARDAR Y CANCELAR -->
       <div class="flex justify-end gap-4 coc-container">
         <a href="/formaciones" class="coc-btn coc-btn-gold">
           <span>Cancelar</span>
         </a>
         <button type="submit" class="coc-btn coc-btn-green cursor-pointer">
-          <span>Guardar Formación</span>
+          <span>Guardar Cambios</span>
         </button>
       </div>
 
@@ -102,24 +99,52 @@
 <script>
   window.esFormulario = true;
   
-  // Lista de tropas y hechizos seleccionados para la formación, con su cantidad y espacio ocupado
+  // Arrays del estado de la formación
   var listaTropas = [];
   var listaHechizos = [];
 
-  // Capacidad máxima y actual para tropas y hechizos
+  // Limites de espacio
   var MAX_TROPAS = 352;
   var MAX_HECHIZOS = 11;
   var espacioTropasActual = 0;
   var espacioHechizosActual = 0;
 
-  // Función para agregar una tropa o hechizo a la formación
-  function agregar(tipo, id, nombre, imagen, espacio, nivelMaximo) {
+  // Cargo las tropas de la formación actual en los arrays para poder editarlas
+  {% for item in formacion.tropas %}
+    {% if item.tropa %}
+      listaTropas.push({
+        id: '{{ item.tropa.id }}',
+        nombre: '{{ item.tropa.nombre }}',
+        imagen: '{{ item.tropa.imagenIcono }}',
+        espacio: {{ item.tropa.espacio }},
+        nivelMaximo: {{ item.tropa.nivelMaximo }},
+        cantidad: {{ item.cantidad }}
+      });
+      espacioTropasActual += ({{ item.tropa.espacio }} * {{ item.cantidad }});
+    {% endif %}
+  {% endfor %}
 
-    // Compruebo si el tipo es tropa y si al agregarlo se supera la capacidad máxima. Si se supera, no hago nada.
+// Cargo los hechizos de la formación actual en los arrays para poder editarlos
+  {% for item in formacion.hechizos %}
+    {% if item.hechizo %}
+      listaHechizos.push({
+        id: '{{ item.hechizo.id }}',
+        nombre: '{{ item.hechizo.nombre }}',
+        imagen: '{{ item.hechizo.imagenIcono }}',
+        espacio: {{ item.hechizo.espacio }},
+        nivelMaximo: {{ item.hechizo.nivelMaximo }},
+        cantidad: {{ item.cantidad }}
+      });
+      espacioHechizosActual += ({{ item.hechizo.espacio }} * {{ item.cantidad }});
+    {% endif %}
+  {% endfor %}
+
+  // Ejecuto la función para mostrar correctamente las tropas y hechizos ya cargados al editar, y actualizar los contadores
+  actualizarInterfaz();
+
+  function agregar(tipo, id, nombre, imagen, espacio, nivelMaximo) {
     if (tipo === 'tropa') {
       if (espacioTropasActual + espacio > MAX_TROPAS) return;
-
-      // Verifico si la tropa ya está en la lista. Si está, aumento su cantidad.
       var encontrado = false;
       for (var i = 0; i < listaTropas.length; i++) {
         if (listaTropas[i].id === id) {
@@ -127,20 +152,12 @@
           encontrado = true;
         }
       }
-
-      // Si es nuevo, lo agrego a la lista con cantidad 1
       if (!encontrado) {
         listaTropas.push({ id: id, nombre: nombre, imagen: imagen, espacio: espacio, nivelMaximo: nivelMaximo, cantidad: 1 });
       }
-
-      // Aumento el espacio ocupado por las tropas
       espacioTropasActual += espacio;
-
     } else if (tipo === 'hechizo') {
-      // Compruebo si al agregar el hechizo se supera la capacidad máxima. Si se supera, no hago nada.
       if (espacioHechizosActual + espacio > MAX_HECHIZOS) return;
-
-      // Verifico si el hechizo ya está en la lista. Si está, aumento su cantidad.
       var encontrado = false;
       for (var i = 0; i < listaHechizos.length; i++) {
         if (listaHechizos[i].id === id) {
@@ -148,24 +165,15 @@
           encontrado = true;
         }
       }
-
-      // Si es nuevo, lo agrego a la lista con cantidad 1
       if (!encontrado) {
         listaHechizos.push({ id: id, nombre: nombre, imagen: imagen, espacio: espacio, nivelMaximo: nivelMaximo, cantidad: 1 });
       }
-
-      // Aumento el espacio ocupado por los hechizos
       espacioHechizosActual += espacio;
     }
-
-    // Actualizo la interfaz para mostrar la composición actualizada y los contadores.
     actualizarInterfaz();
   }
 
-  // Función para borrar una tropa o hechizo de la formación
   function borrar(tipo, id, espacio) {
-
-    // Si el tipo es tropa, busco la tropa en la lista y reduzco su cantidad. Si la cantidad llega a 0, la elimino de la lista.
     if (tipo === 'tropa') {
       for (var i = 0; i < listaTropas.length; i++) {
         if (listaTropas[i].id === id) {
@@ -177,9 +185,7 @@
           break;
         }
       }
-    } 
-    // Si el tipo es hechizo, hago lo mismo pero con la lista de hechizos
-    else if (tipo === 'hechizo') {
+    } else if (tipo === 'hechizo') {
       for (var i = 0; i < listaHechizos.length; i++) {
         if (listaHechizos[i].id === id) {
           listaHechizos[i].cantidad -= 1;
@@ -191,26 +197,18 @@
         }
       }
     }
-
     actualizarInterfaz();
   }
 
-  // Función para verificar el espacio disponible y deshabilitar las tropas/hechizos que no se pueden agregar
   function verificarEspacios() {
-    
     {% for tropa in tropas %}
       var cardTropa = document.getElementById("tropa-{{ tropa.id }}");
-
       if (cardTropa) {
         var espacioDeTropa = {{ tropa.espacio }};
-
-        // Si al agregar esta tropa se supera el espacio máximo, la deshabilito visualmente, con una escala de grises. Si no, la habilito.
         if (espacioTropasActual + espacioDeTropa > MAX_TROPAS) {
           cardTropa.classList.add("grayscale", "opacity-50", "pointer-events-none");
           cardTropa.classList.remove("hover:scale-105", "hover:border-white");
-        } 
-        // Si no se supera, me aseguro de que esté habilitada visualmente.
-        else {
+        } else {
           cardTropa.classList.remove("grayscale", "opacity-50", "pointer-events-none");
           cardTropa.classList.add("hover:scale-105", "hover:border-white");
         }
@@ -232,17 +230,14 @@
     {% endfor %}
   }
 
-  // Función para actualizar la composición actual de la formación, mostrando las tropas y hechizos seleccionados, sus cantidades, niveles máximos y espacio ocupado, y los contadores de capacidad.
   function actualizarInterfaz() {
     var contenedor = document.getElementById('contenedor-composicion');
     contenedor.innerHTML = "";
 
-    // Si no hay ninguna tropa ni hechizo seleccionado, muestro un mensaje indicando que no hay nada seleccionado.
     if (listaTropas.length === 0 && listaHechizos.length === 0) {
       contenedor.innerHTML = '<p id="mensaje-vacio" class="col-span-full text-sm font-bold text-coc-text-muted italic text-center">No hay ninguna tropa o hechizo seleccionado...</p>';
     }
 
-    // Renderizo primero las tropas elegidas, mostrando su imagen, cantidad, nivel máximo y espacio ocupado. También incluyo un botón para eliminar cada tropa de la formación.
     for (var i = 0; i < listaTropas.length; i++) {
       var t = listaTropas[i];
       var htmlCard = `
@@ -252,11 +247,7 @@
                   class="absolute -top-1 -right-1 w-6 h-6 bg-red-600 border border-black rounded-full flex items-center justify-center font-black text-white shadow-md hover:bg-red-700 cursor-pointer text-xs">
             -
           </button>
-          ${t.cantidad > 1 ? `
-            <div class="absolute top-1.5 left-1.5 bg-black/80 px-1.5 py-0.5 rounded-md font-black text-xs text-coc-text-gold border border-coc-wood-light shadow-md">
-              x${t.cantidad}
-            </div>
-          ` : ''}
+          ${t.cantidad > 1 ? `<div class="absolute top-1.5 left-1.5 bg-black/80 px-1.5 py-0.5 rounded-md font-black text-xs text-coc-text-gold border border-coc-wood-light shadow-md">x${t.cantidad}</div>` : ''}
           <div class="absolute top-[40%] left-1.5 w-7 h-7 bg-linear-to-b from-coc-gold to-coc-gold-dark border-2 border-coc-wood-light rounded-md flex items-center justify-center font-black text-xs text-coc-wood-dark shadow-md">
             ${t.nivelMaximo}
           </div>
@@ -271,7 +262,6 @@
       contenedor.innerHTML += htmlCard;
     }
 
-    // Después renderizo los hechizos elegidos, con el mismo procedimiento que las tropas. También incluyo un botón para eliminar cada hechizo de la formación.
     for (var j = 0; j < listaHechizos.length; j++) {
       var h = listaHechizos[j];
       var htmlCard = `
@@ -281,11 +271,7 @@
                   class="absolute -top-1 -right-1 w-6 h-6 bg-red-600 border border-black rounded-full flex items-center justify-center font-black text-white shadow-md hover:bg-red-700 cursor-pointer text-xs">
             -
           </button>
-          ${h.cantidad > 1 ? `
-            <div class="absolute top-1.5 left-1.5 bg-black/80 px-1.5 py-0.5 rounded-md font-black text-xs text-coc-text-gold border border-coc-wood-light shadow-md">
-              x${h.cantidad}
-            </div>
-          ` : ''}
+          ${h.cantidad > 1 ? `<div class="absolute top-1.5 left-1.5 bg-black/80 px-1.5 py-0.5 rounded-md font-black text-xs text-coc-text-gold border border-coc-wood-light shadow-md">x${h.cantidad}</div>` : ''}
           <div class="absolute top-[40%] left-1.5 w-7 h-7 bg-linear-to-b from-coc-gold to-coc-gold-dark border-2 border-coc-wood-light rounded-md flex items-center justify-center font-black text-xs text-coc-wood-dark shadow-md">
             ${h.nivelMaximo}
           </div>
@@ -300,11 +286,9 @@
       contenedor.innerHTML += htmlCard;
     }
 
-    // Actualizo los contadores de capacidad de tropas y hechizos, mostrando el espacio actual ocupado y el máximo permitido.
     document.getElementById('txt-contador-tropas').innerText = espacioTropasActual + " / " + MAX_TROPAS;
     document.getElementById('txt-contador-hechizos').innerText = espacioHechizosActual + " / " + MAX_HECHIZOS;
 
-    // Antes de renderizar la nueva vista, verifico los espacios para deshabilitar las tropas o hechizos que no se pueden agregar debido a la capacidad máxima.
     verificarEspacios();
   }
 </script>
